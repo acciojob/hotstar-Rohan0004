@@ -57,7 +57,8 @@ public class SubscriptionService {
         //If you are already at an ElITE subscription : then throw Exception ("Already the best Subscription")
         //In all other cases just try to upgrade the subscription and tell the difference of price that user has to pay
         //update the subscription in the repository
-        Subscription subscription = subscriptionRepository.findByUserId(userId);
+        User user = userRepository.findById(userId).get();
+        Subscription subscription = user.getSubscription();
         if (subscription==null) return -1;
 
         if (subscription.getSubscriptionType().equals(SubscriptionType.ELITE)) throw new Exception("Already the best Subscription");
@@ -66,7 +67,6 @@ public class SubscriptionService {
             subscription.setSubscriptionType(SubscriptionType.ELITE);
             int oldAmount=subscription.getTotalAmountPaid();
             subscription.setTotalAmountPaid(1000+subscription.getNoOfScreensSubscribed()*350);
-            User user = subscription.getUser();
             user.setSubscription(subscription);
             userRepository.save(user);
             return subscription.getTotalAmountPaid()-oldAmount;
@@ -74,7 +74,6 @@ public class SubscriptionService {
         subscription.setSubscriptionType(SubscriptionType.PRO);
         int oldAmount=subscription.getTotalAmountPaid();
         subscription.setTotalAmountPaid(800+subscription.getNoOfScreensSubscribed()*250);
-        User user = subscription.getUser();
         user.setSubscription(subscription);
         userRepository.save(user);
         return subscription.getTotalAmountPaid()-oldAmount;

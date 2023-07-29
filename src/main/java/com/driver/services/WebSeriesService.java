@@ -34,7 +34,9 @@ public class WebSeriesService {
         webSeries.setRating(webSeriesEntryDto.getRating());
         webSeries.setSubscriptionType(webSeriesEntryDto.getSubscriptionType());
 
-        ProductionHouse productionHouse = productionHouseRepository.findById(webSeriesEntryDto.getProductionHouseId()).get();
+        Optional<ProductionHouse> optionalProductionHouse = productionHouseRepository.findById(webSeriesEntryDto.getProductionHouseId());
+        if (!optionalProductionHouse.isPresent()) throw new Exception("Production house not found");
+        ProductionHouse productionHouse=optionalProductionHouse.get();
         webSeries.setProductionHouse(productionHouse);
 
         double oldRating= productionHouse.getRatings();
@@ -44,7 +46,7 @@ public class WebSeriesService {
 
         productionHouse = productionHouseRepository.save(productionHouse);
 
-        return productionHouse.getWebSeriesList().get(size).getId();
+        return productionHouse.getWebSeriesList().get(productionHouse.getWebSeriesList().size()-1).getId();
     }
 
 }
