@@ -3,9 +3,7 @@ package com.driver.model;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
 @Entity
-@Table
 public class ProductionHouse {
 
     @Id
@@ -21,11 +19,13 @@ public class ProductionHouse {
     private List<WebSeries> webSeriesList;
 
     public ProductionHouse(String name) {
+        this();
         this.name = name;
-        this.webSeriesList = new ArrayList<>();
     }
 
     public ProductionHouse() {
+        this.webSeriesList = new ArrayList<>();
+        this.ratings=0.0;
     }
 
     public int getId() {
